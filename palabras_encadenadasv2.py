@@ -127,8 +127,13 @@ def consulta():
                     puntuacion_global = 0
                     for partida in puntuaciones:
                         puntuacion_global += partida
-                    print(f'{jugador} ---------- {puntuacion_global}')
-                    print('='*30)
+                    lista_ordenada.append(puntuacion_global)
+
+                lista_ordenada.sort(reverse=True)
+                for puntuacion in lista_ordenada:
+                    print(puntuacion)
+                    #print(f'{jugador} ---------- {puntuacion_global}')
+                    #print('='*30)
                 break
             print("\n¡Eror!. Ingrese un nombre que se encuentre disponible en la base de datos.")
 
