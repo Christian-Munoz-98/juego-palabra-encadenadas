@@ -1,4 +1,4 @@
-import random
+import random, operator
 
 def registro():
     
@@ -76,7 +76,13 @@ def juego(jugadores):
             if palabra in lista_palabras:
                 puntos = 0
             
-            lista_palabras.append(palabra)
+            if len(lista_palabras) == 0:
+                lista_palabras.append(palabra)
+            else:
+                if palabra != lista_palabras[len(lista_palabras)-1]:
+                    lista_palabras.append(palabra)
+                else:
+                    puntos = -2
 
             if num_jugador == 1:
                 puntuacion_1 += puntos
@@ -105,35 +111,44 @@ def juego(jugadores):
 
 def consulta():
     global registro_puntaciones
-    lista_ordenada = []
+    puntuaciones_globales = {}
     
     if len(registro_puntaciones) == 0 :
         print('\n'+'¡ERROR!'.center(51))
         print('No hay puntuaciones registradas en la base de datos')
-
     else:
         while True:
             nombre = input("\nIngrese el nombre del jugador que desea consultrar: ")
 
             if nombre in registro_puntaciones.keys():
+                
                 print('\n'+'PARTIDAS DEL JUGADOR'.center(29,'='))
                 for partida,puntuacion in enumerate(registro_puntaciones[nombre]):
                     print(f'Partida {partida+1}: obtuvo {puntuacion} puntos')
                 print('='*30)
-                print('PUNTUACIONES GLOBALES'.center(29,'='))
+                
                 for jugador,puntuaciones in registro_puntaciones.items():
                     if jugador == nombre:
                         continue
+                    
                     puntuacion_global = 0
+                    
                     for partida in puntuaciones:
                         puntuacion_global += partida
-                    lista_ordenada.append(puntuacion_global)
+                    puntuaciones_globales.setdefault(jugador,puntuacion_global)
+                
+                puntuaciones_ordenadas = list(reversed(sorted(puntuaciones_globales.items(), key=operator.itemgetter(1))))
 
-                lista_ordenada.sort(reverse=True)
-                for puntuacion in lista_ordenada:
-                    print(puntuacion)
-                    #print(f'{jugador} ---------- {puntuacion_global}')
-                    #print('='*30)
+
+                puntuaciones_globales = {}
+
+                for element in puntuaciones_ordenadas:
+                    puntuaciones_globales[element[0]] = element[1]
+                print('PUNTUACIONES GLOBALES'.center(29,'='))
+
+                for jugador,puntuacion_global in puntuaciones_globales.items():
+                    print(f"{jugador}---------{puntuacion_global}")
+                print('='*30)
                 break
             print("\n¡Eror!. Ingrese un nombre que se encuentre disponible en la base de datos.")
 
@@ -162,9 +177,5 @@ if __name__ == '__main__':
     registro_puntaciones = {}
     jugadores = {}
     menu()
-
-#Ordenar las puntuaciones globales de mayor a menor
-#Omitir el registro de las palabras que se ingresron dos veces consecutivas
-#Restar dos puntos cuando el jugador ingresa una palabra repetida consecutivmente
 #Colorear prints
 #Documentar el funcionamiento
