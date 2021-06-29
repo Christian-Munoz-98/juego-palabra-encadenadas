@@ -1,180 +1,212 @@
-import random, operator
+import random, operator, string
+jugadores = {'CARLOS':[23,48,95,34,23],'ENRIQUE':[45,23,18,90,12],'GABRIEL':[45,56,32,45,78],'MIROS':[56,56,98,23,45],'CHRISTIAN':[56,23,34,78,15]}
+Puntos = {}
+
+def menu():
+  print("\033[1;32m"+'\nMenu Principal')
+  print('\033[1;30m'+'\nElija una opción:'+"\033[0;34m"+'\n1.-Registrar Jugador\n2.-Consultar puntuaciones\n3.-Jugar\n4.-Salir')
+
+  select = input('Selección: ')
+
+  if select == '1':
+    registro()
+    menu()
+  elif select == '2':
+    consulta()
+    menu()
+  elif select == '3':
+    jugar()
+    menu()
+  elif select == '4':
+    print("\033[1;35m"+'\nGracias por jugar.\n¡Que tenga buen día!')
+  else: 
+    print("\033[0;31m"+'\n¡Error! Seleccione una opción válida')
+    menu()
 
 def registro():
+  print("\033[1;32m"+'\n¡Bienvenido al Registro de jugadores!:D',"\033[1;30m")
+
+  if len(jugadores) <= 1:
+    print("\033[1;30m"+'\nRecuerde que debe registrar dos jugadores para comenzar una partida')
+  
+  jugador= input('\nIngrese el nombre del nuevo jugador: ')
+  jugador= jugador.upper() 
+
+  if jugador in jugadores:
+    print('\033[0;31m'+'Este jugador ya se encuentra registrado. Si continua reiniciará sus puntuaciones'+'\033[0;34m'+'\n1.-Continuar\n2.-Cancelar registro')
+    select = input('\n¿Desea continuar?: ')
     
-    jugadores = {} #Se reinicia el registro al inicio de la funcion
-
-    jugador_1 = input('\nIngrese el nombre del primer jugador: ')
-    jugadores.setdefault('Jugador 1',jugador_1)#Se define el nombre del primer jugador en el diccionario
-
-    jugador_2 = input('\nIngrese el nombre del segundo jugador: ')
-    jugadores.setdefault('Jugador 2',jugador_2)#Se define el nombre del segundo jugador en el diccionario
-
-    print('\n'+'¡Registro exitoso!'.center(30))
-    return jugadores #regresa el diccionario con los jugadores registrados 
-
-def juego(jugadores):
-
-    global registro_puntaciones
-
-    confirmacion_registro_1 = input('\nIngrese el nombre del primer jugador para confirmar el registro: ')
-    confirmacion_registro_2 = input('\nIngrese el nombre del segundo jugador para confirmar el registro: ')
-
-    if (confirmacion_registro_1 in jugadores.values()) and (confirmacion_registro_2 in jugadores.values()): #confirma la existencia de los jugadores para inicar juego
-
-        alfabeto = 'A B C D E F G H I J K L M N Ñ O P Q R S T U V W X Y Z'.split()#Se obtiene la lista de las letras del alfabeto
-        letra_incial = random.choice(alfabeto) #Selecciona la letra con la que iniciará la partida
-
-        num_jugador = 1 #Variable que define de que jugador es el turno
-
-        palabras_ingresadas_1,palabras_ingresadas_2 = 0,0 #Variables que guarda las palabras ingresadas de cada jugador
-
-        puntuacion_1, puntuacion_2 = 0,0 #Variables para guardar puntuaciones
-
-        vidas_1, vidas_2 = 3,3 #Variable para contabilizar las oportunidades de cada jugador
-
-        puntos = 0 #Variable para deifinir los puntos que suma cada jugador
-
-        lista_palabras = []
-
-        print('\n'+'JUGADORES'.center(30,'=')+'\n\n'+'JUGADOR 1'.center(30,'-')+ '\n\n' + (jugadores['Jugador 1'].upper()).center(30) +'\n\n'+'JUGADOR 2'.center(30,'-')+ '\n\n' + (jugadores['Jugador 2'].upper()).center(30)+'\n\n'+'='*30+'\n\n')
-
-        print(f'Jugador 1, tu primera palabra debe de iniciar con la letra {letra_incial}\n')
-
-        while ((vidas_1 > 0) and (vidas_2 > 0)) and ((palabras_ingresadas_1< 20) and (palabras_ingresadas_2< 20)): #mientras cada jugador no gaste 3 intentos e ingrese menos de 20 palabras la partida se ejecuta
-
-            palabra = input(f'Respuesta Jugador {num_jugador}: ')
-
-            if num_jugador == 1: #controla cual jugador es el que ha agregado una palabra
-                palabras_ingresadas_1 += 1
-            elif num_jugador == 2: 
-                palabras_ingresadas_2 += 1
-            
-            if (palabra[0] != letra_incial.upper()) and (palabra[0] != letra_incial.lower()): #El ciclo se reinicia y solicita al jugador ingresar una palabra valida
-                print(f'Error, vuelve a ingresar la palabra recuerda que debe iniciar con la letra {letra_incial.upper()}')
-                if num_jugador == 1: #Resta una vida al jugador por equivocarse
-                    vidas_1 -= 1
-                elif num_jugador == 2:
-                    vidas_2 -= 1
-                continue
-
-            letra_incial = palabra[len(palabra)-1] #Define la nueva letra con la que debe inicar la siuiente palabra
-
-            if len(palabra) > 7: #Definen cuantos puntos suma el jugador segun la longitud de la palabra
-                puntos = 6
-            elif len(palabra) == 7:
-                puntos = 5
-            elif len(palabra) == 6:
-                puntos = 4
-            elif len(palabra) == 5:
-                puntos = 3
-            elif len(palabra) == 4:
-                puntos = 2
-            else:
-                puntos = 1
-            
-            if palabra in lista_palabras: #Si ingresa una palabra repetida sus puntos se anulan
-                puntos = 0
-            
-            if len(lista_palabras) == 0:
-                lista_palabras.append(palabra)
-            else:
-                if palabra != lista_palabras[len(lista_palabras)-1]:
-                    lista_palabras.append(palabra) #Regisstra las palabras ingresadas siempre y cuando no se ingrese la misma palabra consecutivamente
-                else:
-                    puntos = -2 #resta dos puntos al jugador por el error
-
-            if num_jugador == 1:#Intercambia turnos y suma puntos
-                puntuacion_1 += puntos
-                num_jugador = 2
-            elif num_jugador == 2: 
-                puntuacion_2 += puntos
-                num_jugador = 1
-            
-        if puntuacion_1 > puntuacion_2: #Imprime al ganador de la partida
-            print('\n'+'EL GANADOR ES'.center(30,'=') +'\n'+(jugadores['Jugador 1'].upper()).center(30) + '\n'+'='*30)
-        elif puntuacion_2 > puntuacion_1:
-            print('\n'+'EL GANADOR ES'.center(30,'=') +'\n' + (jugadores['Jugador 2'].upper()).center(30) + '\n'+'='*30)
-        else:
-            print('\n'+'='*28+'\nLA PARTIDA TERMINÓ EN EMPATE\n'+'='*28+'\n')
-    
-        print('Puntuaciones:\n'+ jugadores['Jugador 1'] + ' ' + '='*10 + ' '+ str(puntuacion_1) + '\n' + jugadores['Jugador 2'] + ' ' + '='*10 + ' ' + str(puntuacion_2))
-
-        registro_puntaciones.setdefault(jugadores['Jugador 1'],[])#Crea una lista de puntuaciones para cada jugador nuevo registrado
-        registro_puntaciones.setdefault(jugadores['Jugador 2'],[])
-
-        registro_puntaciones[jugadores['Jugador 1']].append(puntuacion_1)#Agrega la ultima puntuacion de los jugadores al registro
-        registro_puntaciones[jugadores['Jugador 2']].append(puntuacion_2)
-
-    else: 
-        print("\n\n"+"¡ERROR!".center(30)+ "\n\nPuede que uno o más jugadores no estén registrados.Por favor regístrense antes de jugar\n\n")#Mensaje de error en caso de que los jugadores no esten registrados
-
+    if select == '1':
+      jugadores[jugador]=[]
+      print('\033[1;30m'+'\n¡Puntuación Reestablecida!')
+      reg_2()
+    elif select == '2':
+      print('\033[1;30m'+'\nVolviendo al registro')
+      registro()
+    else:
+      print('\nOpcion invalida, Saliendo al menu...')
+  else:
+    jugadores[jugador]= []
+    print('\n¡Registro Existoso!')
+    reg_2()
+  
 def consulta():
-    global registro_puntaciones
-    puntuaciones_globales = {}#Crea un nuevo diccionaro con las puntuaciones ordenadas 
-    
-    if len(registro_puntaciones) == 0 :
-        print('\n'+'¡ERROR!'.center(51))
-        print('No hay puntuaciones registradas en la base de datos') #Error en caso de querer consultar puntuaciones sin jugadores registrados
+  print("\nCONSULTA DE PUNTUACIONES")
+  jugador = input("\n¿A que jugador desea consultar? ")
+  jugador = jugador.upper()
+
+  if jugador in jugadores: 
+    print("\nPuntuaciones de {}\n".format(jugador))
+
+    for indice,partida in enumerate(jugadores[jugador]):
+      print("Puntuacion de la partida {}: {} Puntos".format((indice+1),(partida)))
+
+    if len(jugadores[jugador]) == 0:
+      print("Este jugador no ha realizado una partida")
+    print("\033[0;30m"+"\nPuntuaciones globales de todos los jugadores:\n")
+
+    for jugador in jugadores:
+      puntuacion_total = 0
+      for partida in jugadores[jugador]:
+        puntuacion_total += partida
+      Puntos[jugador] = puntuacion_total
+    puntuaciones_globales = dict(sorted(Puntos.items(), key=operator.itemgetter(1),reverse=True))
+    contador = 1
+
+    for jugador in puntuaciones_globales:
+      print("{}° lugar {} con {} puntos".format ((contador),(jugador),(puntuaciones_globales[jugador])))
+      contador += 1
+
+    print("¿Desea consutar la puntuacion de otro jugador?\n1.-Si \n2.-No")
+    select = input('Selección: ')
+
+    if select == '1':
+      consulta()
+    elif select == '2':
+      print("\033[1;30m"+'\nSaliendo al menu...')
+    else: 
+      print("\033[0;31m"+'\n¡Error! Saliendo al menu...')
+
+  else:
+    print("\n¡El jugador que desea consultar no se encuentra registrado!")
+  
+def jugar():
+
+  if len(jugadores) < 2:
+    print("\nDebe haber al menos dos jugadores registrados para poder jugar\n")
+  else:
+    jugador_1 = input('\nIngrese el nombre del primer jugador para confirmar el registro: ')
+    jugador_1 = jugador_1.upper()
+    jugador_2 = input('\nIngrese el nombre del segundo jugador para confirmar el registro: ')
+    jugador_2 = jugador_2.upper()
+
+    if (jugador_1 in jugadores) and (jugador_2 in jugadores):
+      print(f'\n¡Confirmación exitosa!\nJUGADOR 1: {jugador_1}\nJUGADOR 2: {jugador_2}\n')
+      
+      letra_inicio = random.choice(string.ascii_letters)
+      letra_inicio = letra_inicio.upper()
+
+      jugador_actual = 1
+
+      palabras_ingresadas_1,palabras_ingresadas_2 = 0,0
+
+      puntuacion_1, puntuacion_2 = 0,0
+
+      puntos = 0
+
+      vidas_1, vidas_2 = 3,3
+
+      registro_palabras = []
+
+      error = False
+
+      while ((vidas_1 > 0) and (vidas_2 > 0)) and ((palabras_ingresadas_1< 20) and (palabras_ingresadas_2< 20)):
+        palabra_ingresada = input(f'\nTurno del jugador {jugador_actual} Ingrese una palabra  que inicie con la letra {letra_inicio}--->')
+        palabra_ingresada = palabra_ingresada.upper()
+
+        if jugador_actual == 1:
+          palabras_ingresadas_1 += 1
+        else:
+          palabras_ingresadas_2 += 1
+
+        if palabra_ingresada[0] != letra_inicio:
+          print(f'¡Error! vuelva a ingresar la palabra. Recuerda que debe iniciar con la letra {letra_inicio}')
+          error = True
+          if jugador_actual == 1:
+            vidas_1 -= 1
+          else:
+            vidas_2 -= 1
+          continue
+        
+        letra_inicio = palabra_ingresada[len(palabra_ingresada)-1]
+
+        if error:
+          puntos = 0
+          if len(palabra_ingresada) > 7:
+            puntos = 4
+          elif len(palabra_ingresada) == 7:
+            puntos = 3
+          elif len(palabra_ingresada) == 6:
+            puntos = 2
+          elif len(palabra_ingresada) == 5:
+            puntos = 1
+          elif len(palabra_ingresada) == 4:
+            puntos = 0.5
+        else:
+          puntos = 1
+          if len(palabra_ingresada) > 7:
+            puntos = 6
+          elif len(palabra_ingresada) == 7:
+            puntos = 5
+          elif len(palabra_ingresada) == 6:
+            puntos = 4
+          elif len(palabra_ingresada) == 5:
+            puntos = 3
+          elif len(palabra_ingresada) == 4:
+            puntos = 2
+      
+        error = False
+
+        if palabra_ingresada in registro_palabras:
+          puntos = 0
+        else:
+          registro_palabras.append(palabra_ingresada)
+        
+        print(f'\nJugador {jugador_actual} Suma {puntos} Puntos\n')
+        
+        if jugador_actual == 1:
+          puntuacion_1 += puntos
+          jugador_actual = 2
+        else:
+          puntuacion_2 += puntos
+          jugador_actual = 1
+        
+      if puntuacion_1 > puntuacion_2:
+        print(f'\nEl ganador es: {jugador_1}\n')
+      elif puntuacion_2 > puntuacion_1:
+        print(f'\nEl ganador es: {jugador_2}\n')
+      else:
+        print('\nLa partida terminó en empate\n')
+      
+      print(f'Puntuaciones:\n{jugador_1}:{puntuacion_1} Puntos\nPuntuaciones:\n{jugador_2}:{puntuacion_2} Puntos')
+
+      jugadores[jugador_1].append(puntuacion_1)
+      jugadores[jugador_2].append(puntuacion_2)
+
     else:
-        while True:
-            nombre = input("\nIngrese el nombre del jugador que desea consultrar: ")
+      print("\nPuede que uno o más jugadores no estén registrados.\nPor favor regístrense antes de jugar.\n")
 
-            if nombre in registro_puntaciones.keys():#Confirma que el jugador está registrado
-                
-                print('\n'+'PARTIDAS DEL JUGADOR'.center(29,'='))
-                for partida,puntuacion in enumerate(registro_puntaciones[nombre]):#Imprime el historial de puntuaciones del jugador 
-                    print(f'Partida {partida+1}: obtuvo {puntuacion} puntos')
-                print('='*30)
-                
-                for jugador,puntuaciones in registro_puntaciones.items():
-                    if jugador == nombre:
-                        continue#Omite al jugador del que se consultó su historial
-                    
-                    puntuacion_global = 0
-                    
-                    for partida in puntuaciones:
-                        puntuacion_global += partida
-                    puntuaciones_globales.setdefault(jugador,puntuacion_global)#Agrega las puntuaciones globales al nuevo diccionario
-                
-                puntuaciones_ordenadas = list(reversed(sorted(puntuaciones_globales.items(), key=operator.itemgetter(1))))#Crea una lista las puntuaciones emparejadas con los jugadores
+def reg_2():
+  print('\n¿Quieres registrar otro jugador?'+"\033[0;34m"+'\n1.-Sí\n2.-No\n')
+  select = input('Selección: ')
 
+  if select == '1':
+    registro()
+  elif select == '2':
+    print("\033[1;30m"+'\nSaliendo al menu...')
+  else: 
+    print("\033[0;31m"+'\n¡Error! Saliendo al menu...')
 
-                puntuaciones_globales = {}
-
-                for element in puntuaciones_ordenadas:
-                    puntuaciones_globales[element[0]] = element[1]#Ordena el diccionario con las puntuaciones globales
-                print('PUNTUACIONES GLOBALES'.center(29,'='))
-
-                for jugador,puntuacion_global in puntuaciones_globales.items():
-                    print(f"{jugador}---------{puntuacion_global}")#Imprime las puntuaciones globales en orden decreciente
-                print('='*30)
-                break
-            print("\n¡Eror!. Ingrese un nombre que se encuentre disponible en la base de datos.")#mensaje de error en caso de que el jugador no esté registrado
-
-def menu(): #Menu de opciones principal
-    global jugadores
-    print('\n'+'ELIJA UNA OPCIÓN'.center(30,'-')+'\n'+'1.Registrar Jugadores'.ljust(30,'-')+'\n'+'2.Verificar puntuaciones'.ljust(30,'-')+'\n'+'3.Jugar'.ljust(30,'-')+'\n'+'4.salir'.ljust(30,'-'))
-    opcion = int(input('\n'+ 'Selección: '))
-
-    if opcion == 1:
-        jugadores = registro()
-        menu() #Recursividad del menu
-    elif opcion == 2:
-        consulta()
-        menu()
-    elif opcion == 3:
-        juego(jugadores)
-        menu()
-    elif opcion == 4:
-        print('\n'+'Saliendo del programa...'.center(30))
-        print('\n'+'Que tenga buen dia!'.center(30))#EL programa se detiene porque se rompio la recursividad
-    else:
-        print('\nError! Elija una opción válida...\n')
-        menu()
-
-if __name__ == '__main__': #Entry point (programa principal)
-    registro_puntaciones = {}#Variables globales
-    jugadores = {}
-    menu()
-#Colorear prints
+#Programa principal
+print("\033[1;35m"+"BIENVENIDO AL JUEGO DE LAS PALABRAS ENCADENADAS")
+menu()
