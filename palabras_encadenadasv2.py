@@ -1,7 +1,9 @@
+#jugadores y puntajes.
 import random, operator, string
 jugadores = {'CARLOS':[23,48,95,34,23],'ENRIQUE':[45,23,18,90,12],'GABRIEL':[45,56,32,45,78],'MIROS':[56,56,98,23,45],'CHRISTIAN':[56,23,34,78,15]}
 Puntos = {}
 
+# menu.
 def menu():
   print("\033[1;32m"+'\nMenu Principal')
   print('\033[1;30m'+'\nElija una opción:'+"\033[0;34m"+'\n1.-Registrar Jugador\n2.-Consultar puntuaciones\n3.-Jugar\n4.-Salir')
@@ -23,12 +25,14 @@ def menu():
     print("\033[0;31m"+'\n¡Error! Seleccione una opción válida')
     menu()
 
+# registro.
 def registro():
   print("\033[1;32m"+'\n¡Bienvenido al Registro de jugadores!:D',"\033[1;30m")
 
   if len(jugadores) <= 1:
     print("\033[1;30m"+'\nRecuerde que debe registrar dos jugadores para comenzar una partida')
   
+#variable para registrar un nuevo jugador.  
   jugador= input('\nIngrese el nombre del nuevo jugador: ')
   jugador= jugador.upper() 
 
@@ -47,21 +51,22 @@ def registro():
       print('\nOpcion invalida, Saliendo al menu...')
   else:
     jugadores[jugador]= []
-    print('\n¡Registro Existoso!')
+    print("\033[3;36m"+'\n¡Registro Existoso!')
     reg_2()
-  
+
+# consultar.  
 def consulta():
-  print("\nCONSULTA DE PUNTUACIONES")
+  print("\033[1;32m"+"\nCONSULTA DE PUNTUACIONES","\033[0;30m")
   jugador = input("\n¿A que jugador desea consultar? ")
   jugador = jugador.upper()
 
-  if jugador in jugadores: 
+  if jugador in jugadores: #confirma que el jugador esta registrado.
     print("\nPuntuaciones de {}\n".format(jugador))
 
-    for indice,partida in enumerate(jugadores[jugador]):
+    for indice,partida in enumerate(jugadores[jugador]): #imprime las puntuaciones del jugador.
       print("Puntuacion de la partida {}: {} Puntos".format((indice+1),(partida)))
 
-    if len(jugadores[jugador]) == 0:
+    if len(jugadores[jugador]) == 0:  #error en caso de que el jugador no haya jugado.
       print("Este jugador no ha realizado una partida")
     print("\033[0;30m"+"\nPuntuaciones globales de todos los jugadores:\n")
 
@@ -85,14 +90,16 @@ def consulta():
     elif select == '2':
       print("\033[1;30m"+'\nSaliendo al menu...')
     else: 
-      print("\033[0;31m"+'\n¡Error! Saliendo al menu...')
+      print("\033[1;37;41m"+'\n¡Error! Saliendo al menu...')
 
   else:
     print("\n¡El jugador que desea consultar no se encuentra registrado!")
   
 def jugar():
 
-  if len(jugadores) < 2:
+# confirma que los jugadores estan registrados.
+  if len(jugadores) < 2: 
+    print("\033[1;32m"+'INICIANDO JUEGO...')
     print("\nDebe haber al menos dos jugadores registrados para poder jugar\n")
   else:
     jugador_1 = input('\nIngrese el nombre del primer jugador para confirmar el registro: ')
@@ -101,7 +108,7 @@ def jugar():
     jugador_2 = jugador_2.upper()
 
     if (jugador_1 in jugadores) and (jugador_2 in jugadores):
-      print(f'\n¡Confirmación exitosa!\nJUGADOR 1: {jugador_1}\nJUGADOR 2: {jugador_2}\n')
+      print("\033[3;36m"+f'\n¡Confirmación exitosa!\nJUGADOR 1: {jugador_1}\nJUGADOR 2: {jugador_2}\n')
       
       letra_inicio = random.choice(string.ascii_letters)
       letra_inicio = letra_inicio.upper()
@@ -197,15 +204,15 @@ def jugar():
       print("\nPuede que uno o más jugadores no estén registrados.\nPor favor regístrense antes de jugar.\n")
 
 def reg_2():
-  print('\n¿Quieres registrar otro jugador?'+"\033[0;34m"+'\n1.-Sí\n2.-No\n')
+  print("\033[0;30m"+'\n¿Quieres registrar otro jugador?'+"\033[0;34m"+'\n1.-Sí\n2.-No\n')
   select = input('Selección: ')
 
   if select == '1':
     registro()
   elif select == '2':
-    print("\033[1;30m"+'\nSaliendo al menu...')
+    print("\033[3;36m"+'\nSaliendo al menu...')
   else: 
-    print("\033[0;31m"+'\n¡Error! Saliendo al menu...')
+    print("\033[1;37;41m"+'\n¡Error! Saliendo al menu...')
 
 #Programa principal
 print("\033[1;35m"+"BIENVENIDO AL JUEGO DE LAS PALABRAS ENCADENADAS")
