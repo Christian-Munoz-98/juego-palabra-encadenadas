@@ -1,6 +1,7 @@
 #jugadores y puntajes.
 import random, operator, string
-jugadores = {'CARLOS':[23,48,95,34,23],'ENRIQUE':[45,23,18,90,12],'GABRIEL':[45,56,32,45,78],'MIROS':[56,56,98,23,45],'CHRISTIAN':[56,23,34,78,15]}
+jugadores = {}
+#jugadores = {'CARLOS':[23,48,95,34,23],'ENRIQUE':[45,23,18,90,12],'GABRIEL':[45,56,32,45,78],'MIROS':[56,56,98,23,45],'CHRISTIAN':[56,23,34,78,15]}
 Puntos = {}
 
 # menu.
@@ -28,10 +29,9 @@ def menu():
 # registra jugadores
 def registro():
   print("\033[1;32m"+'\n¡Bienvenido al Registro de jugadores!:D',"\033[1;30m")
-  print("\033[1;34m"+'\n---Para poder jugar se debe registrar al menos dos jugadores--- ',"\033[1;30m")
 
   if len(jugadores) <= 1:
-    print("\033[1;30m"+'\nRecuerde que debe registrar dos jugadores para comenzar una partida',"\033[1;30m")
+    print("\033[1;34m"+'\n---Recuerde que debe registrar dos jugadores para comenzar una partida---',"\033[1;30m")
 
   #variable para registrar un nuevo jugador. 
   jugador= input('\nIngrese el nombre del nuevo jugador: ')
@@ -101,7 +101,7 @@ def jugar():
   # confirma que los jugadores estan registrados.
   if len(jugadores) < 2: 
     print("\033[1;32m"+'INICIANDO JUEGO...')
-    print("\033[1;34m"+"\nDebe haber al menos dos jugadores registrados para poder jugar\n","\033[0;30m")
+    print("\033[3;31m"+"\033[1;31m"+"\nError, debe haber al menos dos jugadores registrados para poder jugar\n","\033[0;30m")
     
   else:
     jugador_1 = input('\nIngrese el nombre del primer jugador para confirmar el registro: ')
@@ -192,9 +192,9 @@ def jugar():
           jugador_actual = 1
         
       if puntuacion_1 > puntuacion_2: #Define al ganador
-        print("\033[1;37;46m"+f'\nEl ganador es: {jugador_1}\n')
+        print("\033[1;30;47m"+f'\nEl ganador es: {jugador_1}\n')
       elif puntuacion_2 > puntuacion_1:
-        print("\033[1;37;46m"+f'\nEl ganador es: {jugador_2}\n')
+        print("\033[1;30;47m"+f'\nEl ganador es: {jugador_2}\n')
       else:
         print("\033[1;30;47m"+'\nLa partida terminó en empate\n')
 
