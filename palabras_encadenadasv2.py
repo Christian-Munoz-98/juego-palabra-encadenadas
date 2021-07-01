@@ -1,7 +1,7 @@
 #jugadores y puntajes.
 import random, operator, string
-jugadores = {}
-#jugadores = {'CARLOS':[23,48,95,34,23],'ENRIQUE':[45,23,18,90,12],'GABRIEL':[45,56,32,45,78],'MIROS':[56,56,98,23,45],'CHRISTIAN':[56,23,34,78,15]}
+#jugadores = {}
+jugadores = {'CARLOS':[23,48,95,34,23],'ENRIQUE':[45,23,18,90,12],'GABRIEL':[45,56,32,45,78],'MIROS':[56,56,98,23,45],'CHRISTIAN':[56,23,34,78,15]}
 Puntos = {}
 
 # menu.
@@ -83,7 +83,7 @@ def consulta():
       print("\033[0;34m"+"{}° lugar {} con {} puntos".format ((contador),(jugador),(puntuaciones_globales[jugador])))
       contador += 1
 
-    print("\033[0;30m"+"¿Desea consutar la puntuacion de otro jugador?","\033[0;34m"+"\n1.-Si \n2.-No")
+    print("\033[0;30m"+"\n¿Desea consutar la puntuacion de otro jugador?","\033[0;34m"+"\n1.-Si \n2.-No")
     select = input('Selección: ')
 
     if select == '1':
@@ -130,14 +130,9 @@ def jugar():
 
       error = False
 
-      while ((vidas_1 > 0) and (vidas_2 > 0)) and ((palabras_ingresadas_1< 20) and (palabras_ingresadas_2< 20)): #Juego principal
+      while ((vidas_1 > 0) and (vidas_2 > 0)) and ((palabras_ingresadas_1< 21) and (palabras_ingresadas_2< 20)): #Juego principal
         palabra_ingresada = input(f'\n-----Turno del jugador {jugador_actual}----- \nIngrese una palabra  que inicie con la letra {letra_inicio}--->\n')
         palabra_ingresada = palabra_ingresada.upper()
-
-        if jugador_actual == 1:
-          palabras_ingresadas_1 += 1
-        else:
-          palabras_ingresadas_2 += 1
 
         if palabra_ingresada[0] != letra_inicio:
           print("\033[1;37;41m"+"\n¡Error!" "\033[0;31m"+"\033[1;31m"+"\033[3;31m"+f"\nRecuerda que debe iniciar con la letra --> {letra_inicio}")
@@ -185,11 +180,14 @@ def jugar():
         print("\033[1;32m"+f"\nJugador {jugador_actual}""\033[4;30m"+f"\nSuma {puntos} Puntos\n")
         
         if jugador_actual == 1:
+          palabras_ingresadas_1 += 1
           puntuacion_1 += puntos
           jugador_actual = 2
         else:
+          palabras_ingresadas_2 += 1
           puntuacion_2 += puntos
           jugador_actual = 1
+        
         
       if puntuacion_1 > puntuacion_2: #Define al ganador
         print("\033[1;30;47m"+f'\nEl ganador es: {jugador_1}\n')
